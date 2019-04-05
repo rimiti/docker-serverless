@@ -1,4 +1,4 @@
-FROM node:8.15-alpine
+FROM node:lts-alpine
 
 RUN apk update \
     && apk upgrade \
@@ -12,7 +12,6 @@ RUN apk update \
         py-pip \
         tini \
     && pip install awscli \
-    && npm install -g yarn \
     && yarn global add \
         serverless \
     && rm -rf /var/cache/apk/*
@@ -22,4 +21,5 @@ ENV NODE_PATH /usr/local/lib/node_modules
 WORKDIR /service
 
 COPY assume-role /usr/local/bin/
+
 ENTRYPOINT ["/sbin/tini", "--", "yarn -v", "assume-role", "serverless"]
